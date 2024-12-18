@@ -29,12 +29,15 @@ export default function reducer(
       });
     }
     case "edit_task": {
-      return state.map((task) =>
-        task.id === payload.id
-          ? { ...task, title: payload.title, completed: payload.completed }
-          : task
-      );
+      return state.map((task) => {
+        if (task.title === title) {
+          return { ...task, completed: !task.completed };
+        } else {
+          return task;
+        }
+      });
     }
+
     default: {
       throw Error("Unknown Action: " + type);
     }
