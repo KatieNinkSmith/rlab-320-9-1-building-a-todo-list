@@ -1,40 +1,76 @@
 import ActionButton from "./ActionButton";
+import { useState } from "react";
 
 function Task({ task, dispatch }) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [newTitle, setNewTitle] = useState(task.title || ""); // Fallback to empty string
+  const [newCompleted, setNewCompleted] = useState(task.completed ?? false); // Fallback to false
+
+  const handleSave = () => {
+    if (newTitle.trim()) {
+      dispatch({
+        type: "edit-task",
+        payload: { id: task.id, newTitle, newCompleted },
+      });
+      setIsEditing(false);
+    } else {
+      alert("Title cannot be empty.");
+    }
+  };
+
   return (
-    <>
-      <div>
-        <b>Task: {task.title}</b>
+    <div>
+      <div style={{ width: "100%", textAlign: "center", marginTop: "10px" }}>
+        {isEditing ? (
+          <input
+            type="text"
+            value={newTitle}
+            onChange={(e) => setNewTitle(e.target.value)}
+            placeholder="Edit task title"
+          />
+        ) : (
+          <b>Task: {task.title}</b>
+        )}
+      </div>
+      <div style={{ width: "100%", textAlign: "center", marginBottom: "20px" }}>
+        {isEditing ? (
+          <label>
+            <input
+              type="checkbox"
+              checked={newCompleted}
+              onChange={(e) => setNewCompleted(e.target.checked)} // Handle checkbox change directly
+            />
+            Completed
+          </label>
+        ) : (
+          <b>Completed: {task.completed ? "Yes" : "No"}</b>
+        )}
       </div>
       <div>
-        <b>Completed: {task.completed ? "Yes" : "No"}</b>
-      </div>
-      <div>
+        {isEditing ? (
+          <>
+            <button onClick={handleSave}>Save</button>
+            <button onClick={() => setIsEditing(false)}>Cancel</button>
+          </>
+        ) : (
+          <ActionButton
+            type={"edit-task"}
+            payload={{ title: task.title }}
+            dispatch={() => setIsEditing(true)} // Enter editing mode
+          >
+            Edit
+          </ActionButton>
+        )}
         <ActionButton
-          type="remove_task"
+          type="remove-task"
           payload={{ title: task.title }}
           dispatch={dispatch}
-          disabled={!task.completed}
+          disabled={!newCompleted} // Use newCompleted for disable logic
         >
           Delete
         </ActionButton>
-        <ActionButton
-          type="edit_task"
-          payload={{ title: task.title, completed: task.completed }}
-          dispatch={dispatch}
-        >
-          Edit
-        </ActionButton>
-        {/* <br />
-        <ActionButton
-          type="submit"
-          payload={{ title: task.title, completed: task.completed }}
-          dispatch={dispatch}
-        >
-          Save
-        </ActionButton> */}
       </div>
-    </>
+    </div>
   );
 }
 
