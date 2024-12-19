@@ -14,7 +14,7 @@ function Task({ task, dispatch }) {
           type="remove_task"
           payload={{ title: task.title }}
           dispatch={dispatch}
-          disabled={task.completed}
+          disabled={!task.completed}
         >
           Delete
         </ActionButton>
@@ -25,14 +25,14 @@ function Task({ task, dispatch }) {
         >
           Edit
         </ActionButton>
-        <br />
+        {/* <br />
         <ActionButton
           type="submit"
           payload={{ title: task.title, completed: task.completed }}
           dispatch={dispatch}
         >
           Save
-        </ActionButton>
+        </ActionButton> */}
       </div>
     </>
   );

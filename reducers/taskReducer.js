@@ -4,24 +4,28 @@ export default function reducer(
 ) {
   switch (type) {
     case "add_task": {
+      let taskId = state.length + 1;
+      console.log(state);
       if (title === "") {
         return state;
       }
+      console.log(state);
       let haveTask = false;
       state.forEach((task) => {
         if (task.title === title) {
           alert(`Task ${title} already exsists on your list`);
+          haveTask = true;
         }
-        haveTask = true;
       });
       if (haveTask) {
         return state;
       }
       return [
-        { title: title, userId: 1, id: state.length + 1, completed: completed },
+        { userId: 1, id: taskId++, title: title, completed: completed },
         ...state,
       ];
     }
+
     case "remove_task": {
       return state.filter((s) => {
         console.log(s);

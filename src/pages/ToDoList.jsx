@@ -136,6 +136,7 @@ function ToDoList() {
   const toDoList = todo.map((task) => {
     return <Task key={task.id} task={task} dispatch={dispatch} />;
   });
+  // console.log(toDoList, "monkey");
 
   return (
     <div>
